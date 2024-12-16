@@ -33,6 +33,7 @@ import onboarding3 from "@/assets/images/onboarding3.png";
 import signUpCar from "@/assets/images/signup-car.png";
 import test from "@/assets/images/test.png";
 import kitchenPic from "@/assets/images/kitchen-pic.png";
+import atSymbol from "@/assets/icons/at-symbol.png";
 
 export const images = {
   test,
@@ -73,15 +74,16 @@ export const icons = {
   star,
   target,
   to,
+  atSymbol,
 };
 
 export const onboarding = [
   {
     id: 1,
-    title: "Welcome home",
+    title: "Smooth wheels",
     description:
       "Your journey begins with Ryde. Find your ideal ride effortlessly.",
-    image: images.kitchenPic,
+    image: images.onboarding1,
   },
   {
     id: 2,

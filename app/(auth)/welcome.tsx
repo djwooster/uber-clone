@@ -67,7 +67,7 @@ const Welcome = () => {
       </Swiper>
       <CustomButton
         title={activeIndex === 2 ? "Sign Up" : "Next"}
-        className="w-10/12"
+        className="w-10/12 mt-10"
         onPress={handleNext}
       />
     </SafeAreaView>
