@@ -16,7 +16,6 @@ import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const [form, setForm] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -59,7 +58,7 @@ const SignIn = () => {
 
         <OAuth title="Sign In with Google" />
 
-        <Link href="/(auth)/sign-up" className="mt-12 text-center">
+        <Link href="/sign-up" className="mt-12 text-center">
           <Text className="text-slate-500 text-lg  mt-8">
             Don't have an account?{" "}
           </Text>
