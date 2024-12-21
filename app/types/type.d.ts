@@ -63,8 +63,8 @@ declare interface ButtonProps extends TouchableOpacityProps {
     | "secondary"
     | "danger"
     | "success";
-  IconLeft?: React.ComponentType<any>;
-  IconRight?: React.ComponentType<any>;
+  iconLeft?: React.ComponentType<any>;
+  iconRight?: React.ComponentType<any>;
   className?: string;
 }
 

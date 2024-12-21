@@ -1,5 +1,6 @@
 import { router } from "expo-router";
 import React, { useRef, useState } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
 import {
   View,
   Text,
@@ -30,7 +31,7 @@ const Welcome = () => {
   return (
     <SafeAreaView className="flex h-full items-center justify-between bg-slate-100">
       <TouchableOpacity
-        className="flex w-11/12 items-end p-5 bg-transparent w-fit"
+        className="flex w-11/12 items-end p-5 bg-transparent"
         // if the user presses the skip button, we want to redirect them to the sign-up page
         onPress={() => router.replace("/(auth)/sign-up")}
       >
@@ -67,8 +68,11 @@ const Welcome = () => {
       </Swiper>
       <CustomButton
         title={activeIndex === 2 ? "Sign Up" : "Next"}
-        className="w-10/12 mt-10"
+        className="w-10/12 mt-10 flex flex-row items-center justify-center gap-4"
         onPress={handleNext}
+        iconRight={
+          <MaterialIcons name="arrow-forward-ios" size={16} color="white" />
+        }
       />
     </SafeAreaView>
   );

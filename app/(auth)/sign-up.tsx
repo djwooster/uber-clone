@@ -1,5 +1,18 @@
 import React, { useRef, useState } from "react";
-import { View, Text, ScrollView, Image, Linking, Alert } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Linking,
+  Alert,
+  TextInput,
+  Button,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+} from "react-native";
 
 import CustomButton from "../components/CustomButton";
 import { Link, useRouter } from "expo-router";
@@ -18,6 +31,9 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const [code, setCode] = React.useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const { isLoaded, signUp, setActive } = useSignUp();
 
   // Verification state to handle the verification process. Error handling and state management
@@ -37,9 +53,6 @@ const SignUp = () => {
     if (!isLoaded) return;
 
     // Start sign-up process using email and password provided
-    // This is the first step in the sign-up process and works by creating a user in the database.
-    // It also sends an email to the user with a verification code. signUp.create() is a method that creates a user in the database
-    // and returns a promise that resolves to the user object. It is a method of the useSignUp hook.
     try {
       await signUp.create({
         emailAddress: form.email,
@@ -47,8 +60,6 @@ const SignUp = () => {
       });
 
       // Send user an email with verification code
-      // This is the second step in the sign-up process and works by sending an email to the user with a verification code.
-      // It is a method of the useSignUp hook.
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
 
       // Set 'pendingVerification' to true to display second form
@@ -74,43 +85,51 @@ const SignUp = () => {
       // If verification was completed, set the session to active
       // and redirect the user
       if (signUpAttempt.status === "complete") {
-        //TODO create a user in the database
-
         await setActive({ session: signUpAttempt.createdSessionId });
-        setVerification({ ...verification, state: "success" });
-        // router.replace("/");
+        router.replace("/");
       } else {
-        setVerification({
-          ...verification,
-          error: "Verification failed",
-          state: "failed",
-        });
         // If the status is not complete, check why. User may need to
         // complete further steps.
-        console.error(JSON.stringify(signUpAttempt, null, 2));
+
+        console.error(signUpAttempt);
       }
     } catch (err) {
-      setVerification({
-        ...verification,
-        error: err.errors[0].longMessage,
-        state: "failed",
-      });
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
+      Alert.alert(err.errors[0].longMessage);
     }
   };
 
+  // if (verification.state === "pending") {
+  //   return (
+  //     <>
+  //       <Text>Verify your email</Text>
+  //       <TextInput
+  //         value={verification.code}
+  //         placeholder="Enter your verification code"
+  //         onChangeText={(code) => setVerification({ ...verification, code })}
+  //       />
+  //       <Button title="Verify" onPress={onVerifyPress} />
+  //     </>
+  //   );
+  // }
+
   return (
-    <ScrollView className="flex-1 bg-white">
-      <View className="w-full">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
+    >
+      <View className="w-full h-fit  bg-zinc-50">
         <Image source={images.signUpCar} className="z-0 w-full h-[250px]" />
         <Text className="text-slate-900 text-3xl font-bold ml-4">
           Create Account
         </Text>
       </View>
 
-      <View id="input-container" className="p-4 gap-5 flex-1 bg-white">
+      <ScrollView
+        id="input-container"
+        className="p-4  gap-10 flex flex-col bg-zinc-50 h-full"
+      >
         <InputField
           icon={icons.person}
           label="Name"
@@ -120,6 +139,7 @@ const SignUp = () => {
         />
         <InputField
           icon={icons.atSymbol}
+          keyboardType="email-address"
           label="Email"
           placeholder="Enter your email"
           value={form.email}
@@ -152,16 +172,18 @@ const SignUp = () => {
           </Text>
           <Text className="text-blue-500 text-lg">Sign in</Text>
         </Link>
-      </View>
+      </ScrollView>
 
       <ReactNativeModal
         isVisible={verification.state === "pending"}
-        onModalHide={() =>
-          setVerification({ ...verification, state: "success" })
-        }
+        onModalHide={() => {
+          if (verification.state === "success") {
+            setShowSuccessModal(true);
+          }
+        }}
       >
-        <View className="flex  items-center py-6 px-5 justify-between h-fit gap-8 rounded-3xl bg-zinc-100">
-          <View className="flex gap-2">
+        <View className="flex  py-6 px-5 justify-start  gap-4 rounded-3xl bg-zinc-100">
+          <View className="flex flex-col h-fit gap-3">
             <Text className="text-zinc-900 text-3xl font-bold  text-center">
               Verification pending
             </Text>
@@ -169,23 +191,28 @@ const SignUp = () => {
               We have sent you an email with a verification code to {form.email}
               .
             </Text>
-            <InputField
-              className="w-full p-4"
-              icon={icons.lock}
-              keyboardType="numeric"
-              label="Verification code"
-              placeholder="Enter your verification code"
-              value={verification.code}
-              onChangeText={(code: string) =>
-                setVerification({ ...verification, code })
-              }
-            />
+
             {verification.error && (
               <Text className="text-red-500 text-lg text-center">
                 {verification.error}
               </Text>
             )}
           </View>
+          <InputField
+            icon={icons.lock}
+            keyboardType="numeric"
+            label="Verification code"
+            placeholder="Enter your verification code"
+            value={verification.code}
+            onChangeText={(verificationCode) =>
+              setVerification({ ...verification, code: verificationCode })
+            }
+          />
+          {verification.error && (
+            <Text className="text-red-500 text-lg text-center">
+              {verification.error}
+            </Text>
+          )}
           <CustomButton
             className="mt-5 w-full bg-blue-800"
             textVariant="primary"
@@ -196,7 +223,7 @@ const SignUp = () => {
         </View>
       </ReactNativeModal>
 
-      <ReactNativeModal isVisible={verification.state === "success"}>
+      <ReactNativeModal isVisible={showSuccessModal}>
         <View className="flex  items-center py-6 px-5 justify-between h-fit gap-8 rounded-3xl bg-zinc-100">
           <View className="flex gap-2">
             <Text className="text-zinc-900 text-3xl font-bold  text-center">
@@ -215,7 +242,7 @@ const SignUp = () => {
           />
         </View>
       </ReactNativeModal>
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

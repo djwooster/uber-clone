@@ -1,23 +1,36 @@
-import { SignedIn, SignedOut, useUser } from "@clerk/clerk-expo";
+import CustomButton from "@/app/components/CustomButton";
+import { SignedIn, SignedOut, useAuth, useUser } from "@clerk/clerk-expo";
 import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { Text, View, SafeAreaView, Alert } from "react-native";
 
 export default function Page() {
   const { user } = useUser();
+  const { signOut } = useAuth();
+
+  const handleSignOut = () => {
+    signOut();
+  };
 
   return (
-    <View>
+    <SafeAreaView className="flex flex-col items-center justify-center h-full">
       <SignedIn>
-        <Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
+        <View className="flex flex-col items-center justify-center h-full">
+          <Text className="text-2xl font-bold">
+            Welcome {user?.fullName} {user?.emailAddresses[0].emailAddress}
+          </Text>
+        </View>
+        <CustomButton title="Sign out" onPress={handleSignOut} />
       </SignedIn>
       <SignedOut>
-        <Link href="/(auth)/sign-in">
-          <Text>Sign in</Text>
-        </Link>
-        <Link href="/(auth)/sign-up">
-          <Text>Sign up</Text>
-        </Link>
+        <View className="flex flex-col items-center justify-center h-full">
+          <Link href="/(auth)/sign-in">
+            <Text className="text-blue-500 text-lg">Sign in</Text>
+          </Link>
+          <Link href="/(auth)/sign-up">
+            <Text className="text-blue-500 text-lg">Sign up</Text>
+          </Link>
+        </View>
       </SignedOut>
-    </View>
+    </SafeAreaView>
   );
 }

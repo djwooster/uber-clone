@@ -48,7 +48,7 @@ const InputField = ({
           )}
 
           <TextInput
-            className={`bg-slate-50 p-4 text-left h-full w-full border border-zinc-200 rounded-lg  ${inputStyle}`}
+            className={`bg-slate-50 p-4 text-left h-full w-full border border-zinc-200 rounded-lg ${inputStyle}`}
             style={{
               lineHeight: 18,
               paddingLeft: icon ? 40 : 16,

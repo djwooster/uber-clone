@@ -1,6 +1,6 @@
 import "@/global.css";
 import { useAuth } from "@clerk/clerk-expo";
-
+import { Slot } from "expo-router";
 import { Redirect, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -18,8 +18,14 @@ SplashScreen.preventAutoHideAsync();
 // This layout uses Stack navigation, which provides a card-style navigation common in mobile apps
 // Any screens defined within this layout will automatically be part of this navigation stack
 export default function Onboarding() {
+  const { isSignedIn } = useAuth();
+
+  if (isSignedIn) {
+    return <Redirect href={"/(root)/(tabs)/Home"} />;
+  }
   return (
     <Stack>
+      <Slot />
       {/* Each Stack.Screen corresponds to a route/page within the (auth) directory */}
       {/* headerShown: false removes the default navigation header for these screens */}
       <Stack.Screen name="welcome" options={{ headerShown: false }} />
