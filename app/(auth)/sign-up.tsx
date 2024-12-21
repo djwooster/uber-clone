@@ -86,7 +86,7 @@ const SignUp = () => {
       // and redirect the user
       if (signUpAttempt.status === "complete") {
         await setActive({ session: signUpAttempt.createdSessionId });
-        router.replace("/");
+        setVerification({ ...verification, state: "success" });
       } else {
         // If the status is not complete, check why. User may need to
         // complete further steps.
@@ -99,20 +99,6 @@ const SignUp = () => {
       Alert.alert(err.errors[0].longMessage);
     }
   };
-
-  // if (verification.state === "pending") {
-  //   return (
-  //     <>
-  //       <Text>Verify your email</Text>
-  //       <TextInput
-  //         value={verification.code}
-  //         placeholder="Enter your verification code"
-  //         onChangeText={(code) => setVerification({ ...verification, code })}
-  //       />
-  //       <Button title="Verify" onPress={onVerifyPress} />
-  //     </>
-  //   );
-  // }
 
   return (
     <KeyboardAvoidingView
@@ -128,7 +114,10 @@ const SignUp = () => {
 
       <ScrollView
         id="input-container"
-        className="p-4  gap-10 flex flex-col bg-zinc-50 h-full"
+        className="p-4 flex flex-col bg-zinc-50 h-full"
+        contentContainerStyle={{
+          gap: 24,
+        }}
       >
         <InputField
           icon={icons.person}
@@ -182,10 +171,10 @@ const SignUp = () => {
           }
         }}
       >
-        <View className="flex  py-6 px-5 justify-start  gap-4 rounded-3xl bg-zinc-100">
+        <View className="flex  py-6 px-5 justify-start  gap-4 rounded-3xl bg-pink-200">
           <View className="flex flex-col h-fit gap-3">
             <Text className="text-zinc-900 text-3xl font-bold  text-center">
-              Verification pending
+              Verify your email
             </Text>
             <Text className="text-zinc-400 text-lg text-center">
               We have sent you an email with a verification code to {form.email}
@@ -214,7 +203,7 @@ const SignUp = () => {
             </Text>
           )}
           <CustomButton
-            className="mt-5 w-full bg-blue-800"
+            className="mt-5 w-full bg-orange-800"
             textVariant="primary"
             bgVariant="primary"
             title="Verify"
@@ -238,7 +227,10 @@ const SignUp = () => {
             textVariant="primary"
             bgVariant="primary"
             title="Home"
-            onPress={() => router.replace("/(root)/home")}
+            onPress={() => {
+              setShowSuccessModal(false);
+              router.push("/(root)/(tabs)/Home");
+            }}
           />
         </View>
       </ReactNativeModal>

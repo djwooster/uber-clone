@@ -20,9 +20,9 @@ SplashScreen.preventAutoHideAsync();
 export default function Onboarding() {
   const { isSignedIn } = useAuth();
 
-  if (isSignedIn) {
-    return <Redirect href={"/(root)/(tabs)/Home"} />;
-  }
+  // if (isSignedIn) {
+  //   return <Redirect href={"/(root)/(tabs)/Home"} />;
+  // }
   return (
     <Stack>
       <Slot />
