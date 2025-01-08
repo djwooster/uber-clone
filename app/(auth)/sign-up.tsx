@@ -171,7 +171,7 @@ const SignUp = () => {
           }
         }}
       >
-        <View className="flex  py-6 px-5 justify-start  gap-4 rounded-3xl bg-pink-200">
+        <View className="flex  py-6 px-5 justify-start  gap-4 rounded-3xl bg-zinc-100">
           <View className="flex flex-col h-fit gap-3">
             <Text className="text-zinc-900 text-3xl font-bold  text-center">
               Verify your email

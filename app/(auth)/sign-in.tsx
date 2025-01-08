@@ -19,9 +19,14 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+
+  const [verification, setVerification] = useState({
+    state: "idle",
+    code: "",
+  });
   const router = useRouter();
   const handleSignIn = async () => {
-    router.replace("/(auth)/welcome");
+    setVerification({ ...verification, state: "pending" });
   };
   return (
     <ScrollView className="flex-1 bg-white">
