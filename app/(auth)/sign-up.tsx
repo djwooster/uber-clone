@@ -22,10 +22,8 @@ import OAuth from "../components/OAuth";
 import { useSignUp } from "@clerk/clerk-expo";
 import ReactNativeModal from "react-native-modal";
 
-// This is the sign-up page. It is a component that is used to sign up a user.
-// It is a component that is used to sign up a user.
 const SignUp = () => {
-  // Form state to handle the form data. It is a state that is used to handle the form data.
+  // Form state to handle the form data.
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -37,7 +35,7 @@ const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
 
   // Verification state to handle the verification process. Error handling and state management
-  // and it works by using the state of the verification object to determine the state of the verification process
+  // and it works by using the state property of the verification object to determine the state of the verification process.
   const [verification, setVerification] = useState({
     state: "default",
     error: "",
@@ -62,12 +60,8 @@ const SignUp = () => {
       // Send user an email with verification code
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
 
-      // Set 'pendingVerification' to true to display second form
-      // and capture OTP code
       setVerification({ ...verification, state: "pending" });
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       Alert.alert("Error", err.errors[0].longMessage);
     }
   };
@@ -77,25 +71,25 @@ const SignUp = () => {
     if (!isLoaded) return;
 
     try {
-      // Use the code the user provided to attempt verification
+      // Use the code the user entered to attempt verification
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
         code: verification.code,
       });
 
-      // If verification was completed, set the session to active
-      // and redirect the user
+      // If verification was completed, set the session to active and redirect the user
       if (signUpAttempt.status === "complete") {
+        // TODO add a database call to create a user
         await setActive({ session: signUpAttempt.createdSessionId });
         setVerification({ ...verification, state: "success" });
       } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-
+        setVerification({
+          ...verification,
+          error: "Verification failed",
+          state: "failed",
+        });
         console.error(signUpAttempt);
       }
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       Alert.alert(err.errors[0].longMessage);
     }
   };
@@ -203,7 +197,7 @@ const SignUp = () => {
             </Text>
           )}
           <CustomButton
-            className="mt-5 w-full bg-orange-800"
+            className="mt-2 w-full bg-orange-800"
             textVariant="primary"
             bgVariant="primary"
             title="Verify"
@@ -223,7 +217,7 @@ const SignUp = () => {
             </Text>
           </View>
           <CustomButton
-            className="mt-5 w-full bg-blue-800"
+            className="mt-2 w-full bg-blue-800"
             textVariant="primary"
             bgVariant="primary"
             title="Home"
