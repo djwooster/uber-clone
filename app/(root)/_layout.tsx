@@ -1,19 +1,24 @@
-import { Tabs } from "expo-router";
+import { Stack } from "expo-router";
 
-const Layout = () => (
-  <Tabs
-    initialRouteName="index"
-    screenOptions={{ tabBarActiveTintColor: "red" }}
-  >
-    <Tabs.Screen
-      name="home"
-      options={{
-        title: "Home",
-        headerShown: false,
-        tabBarIcon: () => <HomeIcon />,
-      }}
-    />
-  </Tabs>
-);
+const Layout = () => {
+  return (
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      {/* <Stack.Screen name="find-ride" options={{ headerShown: false }} /> */}
+      {/* <Stack.Screen
+        name="confirm-ride"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="book-ride"
+        options={{
+          headerShown: false,
+        }}
+      /> */}
+    </Stack>
+  );
+};
 
 export default Layout;

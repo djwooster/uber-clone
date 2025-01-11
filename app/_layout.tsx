@@ -14,9 +14,6 @@ import { tokenCache } from "@/cache";
 SplashScreen.preventAutoHideAsync();
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
-console.log(publishableKey);
-
-console.log("PublishableKey:", publishableKey);
 
 export default function RootLayout() {
   if (!publishableKey) {

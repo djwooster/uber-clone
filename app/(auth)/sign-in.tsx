@@ -42,7 +42,7 @@ const SignIn = () => {
       // and redirect the user
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/");
+        router.replace("/(root)/(tabs)/home");
       } else {
         // If the status isn't complete, check why. User might need to
         // complete further steps.
@@ -53,7 +53,7 @@ const SignIn = () => {
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
     }
-  }, [isLoaded, form.email, form.password]);
+  }, [isLoaded, form]);
   return (
     <ScrollView className="flex-1 bg-white">
       <View className="flex bg-white ">
