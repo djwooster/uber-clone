@@ -1,10 +1,31 @@
+import { icons } from "@/app/constants";
 import { Tabs } from "expo-router";
 import { Image, View } from "react-native";
+import { ImageSourcePropType } from "react-native";
 
-const TabIcon = () => (
-  <View>
-    <View>
-      <Image></Image>
+const TabIcon = ({
+  focused,
+  source,
+}: {
+  focused: boolean;
+  source: ImageSourcePropType;
+}) => (
+  <View
+    className={`flex flex-row justify-center items-center rounded-lg ${
+      focused ? "bg-zinc-300 text-black" : "bg-transparent"
+    }`}
+  >
+    <View
+      className={`w-12 h-12 items-center justify-center rounded-lg ${
+        focused ? "bg-white" : "bg-transparent"
+      }`}
+    >
+      <Image
+        source={source}
+        tintColor={focused ? "black" : "white"}
+        resizeMode="contain"
+        className="w-7 h-7"
+      />
     </View>
   </View>
 );
@@ -14,7 +35,25 @@ const Layout = () => (
     initialRouteName="home"
     screenOptions={{
       tabBarActiveTintColor: "white",
-      tabBarStyle: { backgroundColor: "black" },
+      tabBarInactiveTintColor: "white",
+      tabBarShowLabel: false,
+      tabBarStyle: {
+        height: 80,
+        backgroundColor: "black",
+        borderRadius: 20,
+        overflow: "hidden",
+        marginHorizontal: 20,
+        borderTopWidth: 0,
+        marginBottom: 20,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+      },
     }}
   >
     <Tabs.Screen
@@ -22,7 +61,39 @@ const Layout = () => (
       options={{
         title: "Home",
         headerShown: false,
-        tabBarIcon: () => <TabIcon />,
+        tabBarIcon: ({ focused }) => (
+          <TabIcon focused={focused} source={icons.home} />
+        ),
+      }}
+    />
+    <Tabs.Screen
+      name="chat"
+      options={{
+        title: "Chat",
+        headerShown: false,
+        tabBarIcon: ({ focused }) => (
+          <TabIcon focused={focused} source={icons.chat} />
+        ),
+      }}
+    />
+    <Tabs.Screen
+      name="profile"
+      options={{
+        title: "Profile",
+        headerShown: false,
+        tabBarIcon: ({ focused }) => (
+          <TabIcon focused={focused} source={icons.profile} />
+        ),
+      }}
+    />
+    <Tabs.Screen
+      name="rides"
+      options={{
+        title: "Rides",
+        headerShown: false,
+        tabBarIcon: ({ focused }) => (
+          <TabIcon focused={focused} source={icons.list} />
+        ),
       }}
     />
   </Tabs>
