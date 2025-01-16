@@ -67,7 +67,7 @@ const RideCard = ({
           <View className="flex flex-row items-center w-full justify-between mb-5">
             <Text className="text-sm text-zinc-500">Payment Status</Text>
             <Text
-              className={`text-sm font-bold ${
+              className={`text-sm font-bold capitalize ${
                 payment_status === "paid" ? "text-green-500" : "text-red-500"
               }`}
             >

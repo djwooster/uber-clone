@@ -1,8 +1,20 @@
 import CustomButton from "@/app/components/CustomButton";
+import GoogleTextInput from "@/app/components/GoogleTextInput";
+import Map from "@/app/components/Map";
 import RideCard from "@/app/components/RideCard";
+import { icons, images } from "@/app/constants";
 import { SignedIn, SignedOut, useAuth, useUser } from "@clerk/clerk-expo";
 import { Link } from "expo-router";
-import { Text, View, SafeAreaView, Alert, FlatList } from "react-native";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  Alert,
+  FlatList,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 
 const recentRides = [
   {
@@ -110,13 +122,19 @@ const recentRides = [
     },
   },
 ];
+const loading = true;
 
 export default function Page() {
   const { user } = useUser();
   const { signOut } = useAuth();
+  console.log(user);
 
   const handleSignOut = () => {
     signOut();
+  };
+
+  const handleDestinationPress = () => {
+    console.log("Destination pressed");
   };
 
   return (
@@ -124,6 +142,61 @@ export default function Page() {
       <FlatList
         data={recentRides}
         renderItem={({ item }) => <RideCard ride={item} />}
+        className="px-5"
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 75 }}
+        ListEmptyComponent={() => (
+          <View className="flex flex-col flex-1 items-center justify-center">
+            {!loading ? (
+              <>
+                <Image
+                  source={images.noResult}
+                  className="w-40 h-40"
+                  resizeMode="contain"
+                />
+                <Text className="text-zinc-500">No rides found</Text>
+              </>
+            ) : (
+              <View className="flex flex-col w-full h-[100vh] gap-4 justify-center items-center">
+                <ActivityIndicator size="small" color="#000000" />
+                <Text className="text-zinc-400 text-sm font-bold">
+                  Loading...
+                </Text>
+              </View>
+            )}
+          </View>
+        )}
+        ListHeaderComponent={() => (
+          <View>
+            <View className="flex flex-col gap-6 my-5 justify-between items-start">
+              <View className="flex flex-col gap-1 items-start">
+                <Text className="text-zinc-800 text-lg font-bold capitalize">
+                  Welcome,{" "}
+                  {user?.firstName ||
+                    user?.emailAddresses[0].emailAddress.split("@")[0]}
+                  !
+                </Text>
+              </View>
+            </View>
+            <GoogleTextInput
+              icon={icons.search}
+              placeholder="Search for a ride"
+              containerStyle="bg-white shadow-md shadow-zinc-200 mb-5"
+              inputStyle="text-zinc-800"
+              onPress={handleDestinationPress}
+            />
+            <>
+              <Text className="text-zinc-800 text-lg font-bold mb-3">
+                Your current location is:
+              </Text>
+
+              {/* <Map /> */}
+            </>
+            <Text className="text-zinc-700 text-md font-semibold mb-4">
+              Your recent rides
+            </Text>
+          </View>
+        )}
       />
     </SafeAreaView>
   );
