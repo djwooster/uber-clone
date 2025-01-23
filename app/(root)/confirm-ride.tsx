@@ -5,9 +5,8 @@ import CustomButton from "../components/CustomButton";
 import { router } from "expo-router";
 import { useDriverStore } from "@/store";
 
-const { drivers, selectedDriver, setSelectedDriver } = useDriverStore();
-
 const ConfirmRide = () => {
+  const { drivers, selectedDriver, setSelectedDriver } = useDriverStore();
   return (
     <RideLayout title="Confirm Ride" snapPoints={["50%", "85%"]}>
       <FlatList
@@ -15,7 +14,7 @@ const ConfirmRide = () => {
         renderItem={({ item }) => (
           <DriverCard
             selected={selectedDriver!}
-            setSelected={() => setSelectedDriver(item.id)}
+            setSelected={() => setSelectedDriver(Number(item.id))}
             item={item}
           />
         )}
